@@ -1,31 +1,32 @@
 'use strict';
 
 let busMall = [
-    'bag.jpg',
-    'banana.jpg',
-    'bathroom.jpg',
-    'boots.jpg',
-    'breakfast.jpg',
-    'bubblegum.jpg',
-    'chair.jpg',
-    'cthulhu.jpg',
-    'dog-duck.jpg',
-    'dragon.jpg',
-    'pen.jpg',
-    'pet-sweep.jpg',
-    'scissors.jpg',
-    'shark.jpg',
+    'bag',
+    'banana',
+    'bathroom',
+    'boots',
+    'breakfast',
+    'bubblegum',
+    'chair',
+    'cthulhu',
+    'dog-duck',
+    'dragon',
+    'pen',
+    'pet-sweep',
+    'scissors',
+    'shark',
     'sweep.png',
-    'tauntaun.jpg',
-    'unicorn.jpg',
+    'tauntaun',
+    'unicorn',
     'usb.gif',
-    'water-can.jpg',
-    'wine-glass.jpg',
+    'water-can',
+    'wine-glass',
 
 ];
+
 function shop(name) {
     this.name = name;
-    this.image = `./img/${name}`;
+    this.image = `./img/${name}.jpg`;
     this.clickCounter = 0;
     this.shown = 0;
     shop.all.push(this);
@@ -51,13 +52,14 @@ const middleImage = document.getElementById('middleImage');
 const rightImage = document.getElementById('rightImage');
 let buttonElement = document.getElementById('show-result');
 let ulElement = document.getElementById('sort-data');
+let previous = [];
 
 
 
 let leftShopIndex = 0;
 let middleShopIndex = 0;
 let rightShopIndex = 0;
-const counterOfClick = 23;
+const counterOfClick = 25;
 
 
 
@@ -65,7 +67,10 @@ function Rshop() {
     buttonElement.style.display = 'none';
     ulElement.style.display = 'none';
 
-    let leftIndex = randomNumber(0, shop.all.length - 1);
+    let leftIndex;
+    do{
+        leftIndex = randomNumber(0, shop.all.length - 1);
+    }while(previous.indexOf(leftIndex)!== -1);
     leftImage.src = shop.all[leftIndex].image;
     leftImage.alt = shop.all[leftIndex].name;
     leftShopIndex = leftIndex;
@@ -73,7 +78,7 @@ function Rshop() {
     let middleIndex;
     do {
         middleIndex = randomNumber(0, shop.all.length - 1);
-    } while (leftIndex === middleIndex);
+    } while (leftIndex === middleIndex||previous.indexOf(middleIndex)!== -1);
     middleImage.src = shop.all[middleIndex].image;
     middleImage.alt = shop.all[middleIndex].name;
     middleShopIndex = middleIndex;
@@ -82,14 +87,17 @@ function Rshop() {
     let rightIndex;
     do {
         rightIndex = randomNumber(0, shop.all.length - 1);
-    } while (leftIndex === rightIndex || middleIndex === rightIndex);
+    } while (leftIndex === rightIndex || middleIndex === rightIndex|| previous.indexOf(rightIndex)!== -1);
     rightImage.src = shop.all[rightIndex].image;
     rightImage.alt = shop.all[rightIndex].name;
     rightShopIndex = rightIndex;
+    previous[0]=leftIndex;
+    previous[1]=middleIndex;
+    previous[2]=rightIndex
 
-    shop.all[leftIndex].shown++;
-    shop.all[middleIndex].shown++;
-    shop.all[rightIndex].shown++;
+    shop.all[leftShopIndex].shown++;
+    shop.all[middleShopIndex].shown++;
+    shop.all[rightShopIndex].shown++;
 
 
 
@@ -134,6 +142,49 @@ function Show(event) {
     imageSection.removeEventListener('click', Click, true);
 }
 buttonElement.addEventListener('click', Show);
+buttonElement.addEventListener('click', renderChart);
 imageSection.addEventListener('click', Click);
 
 Rshop();
+
+function renderChart() {
+
+    let nameArray = [];
+    let clicksArray = [];
+    let myChart;
+    let shownArray = [];
+
+    for (let i = 0; i < shop.all.length; i++) {
+        nameArray.push(shop.all[i].name);
+        clicksArray.push(shop.all[i].clickCounter);
+        shownArray.push(shop.all[i].shown);
+
+    }
+
+    let ctx = document.getElementById('myChart').getContext('2d');
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nameArray,
+            datasets: [
+                {
+                    label: '# of Votes',
+                    data: clicksArray,
+                    backgroundColor: 'red',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 3
+                }
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+}

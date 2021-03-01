@@ -68,3 +68,26 @@
   footer p {
     width: 100%;
   }
+
+
+  /* #leftImage{
+    width: 100%;
+    height: 80%;
+  }
+  #middleImage{
+    width: 100%;
+    height: 80%;
+
+  }
+
+  #rightImage{
+    width: 100%;
+    height: 80%;
+
+  } */
+
+  .image-section img { 
+
+    width: 100%;
+    height: 80%;
+  }
