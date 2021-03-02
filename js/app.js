@@ -39,6 +39,7 @@ for (let i = 0; i < busMall.length; i++) {
 
 }
 
+
 console.log(shop.all);
 
 
