@@ -1,32 +1,32 @@
 'use strict';
 
 let busMall = [
-    'bag',
-    'banana',
-    'bathroom',
-    'boots',
-    'breakfast',
-    'bubblegum',
-    'chair',
-    'cthulhu',
-    'dog-duck',
-    'dragon',
-    'pen',
-    'pet-sweep',
-    'scissors',
-    'shark',
+    'bag.jpg',
+    'banana.jpg',
+    'bathroom.jpg',
+    'boots.jpg',
+    'breakfast.jpg',
+    'bubblegum.jpg',
+    'chair.jpg',
+    'cthulhu.jpg',
+    'dog-duck.jpg',
+    'dragon.jpg',
+    'pen.jpg',
+    'pet-sweep.jpg',
+    'scissors.jpg',
+    'shark.jpg',
     'sweep.png',
-    'tauntaun',
-    'unicorn',
+    'tauntaun.jpg',
+    'unicorn.jpg',
     'usb.gif',
-    'water-can',
-    'wine-glass',
+    'water-can.jpg',
+    'wine-glass.jpg',
 
 ];
 
 function shop(name) {
-    this.name = name;
-    this.image = `./img/${name}.jpg`;
+    this.image = `./img/${name}`;
+    this.name = name.split('.')[0];
     this.clickCounter = 0;
     this.shown = 0;
     shop.all.push(this);
