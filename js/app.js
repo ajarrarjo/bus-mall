@@ -26,16 +26,26 @@ let busMall = [
 
 function shop(name) {
     this.image = `./img/${name}`;
-    this.name = name.split('.')[0];
+    this.name = splitName(name);
     this.clickCounter = 0;
     this.shown = 0;
     shop.all.push(this);
+    localStorage.setItem('Shop', JSON.stringify(shop.all));
+
 }
 shop.all = [];
 shop.counter = 0;
+function splitName(name){
+    return name.split('.').slice(0,-1).join('.');
+}
+if (JSON.parse(localStorage.getItem('Shop'))) {
+    shop.all = JSON.parse(localStorage.getItem('Shop'));
 
-for (let i = 0; i < busMall.length; i++) {
-    new shop(busMall[i]);
+} else {
+    for (let i = 0; i < busMall.length; i++) {
+        new shop(busMall[i]);
+
+    }
 
 }
 
@@ -69,9 +79,9 @@ function Rshop() {
     ulElement.style.display = 'none';
 
     let leftIndex;
-    do{
+    do {
         leftIndex = randomNumber(0, shop.all.length - 1);
-    }while(previous.indexOf(leftIndex)!== -1);
+    } while (previous.indexOf(leftIndex) !== -1);
     leftImage.src = shop.all[leftIndex].image;
     leftImage.alt = shop.all[leftIndex].name;
     leftShopIndex = leftIndex;
@@ -79,7 +89,7 @@ function Rshop() {
     let middleIndex;
     do {
         middleIndex = randomNumber(0, shop.all.length - 1);
-    } while (leftIndex === middleIndex||previous.indexOf(middleIndex)!== -1);
+    } while (leftIndex === middleIndex || previous.indexOf(middleIndex) !== -1);
     middleImage.src = shop.all[middleIndex].image;
     middleImage.alt = shop.all[middleIndex].name;
     middleShopIndex = middleIndex;
@@ -88,13 +98,13 @@ function Rshop() {
     let rightIndex;
     do {
         rightIndex = randomNumber(0, shop.all.length - 1);
-    } while (leftIndex === rightIndex || middleIndex === rightIndex|| previous.indexOf(rightIndex)!== -1);
+    } while (leftIndex === rightIndex || middleIndex === rightIndex || previous.indexOf(rightIndex) !== -1);
     rightImage.src = shop.all[rightIndex].image;
     rightImage.alt = shop.all[rightIndex].name;
     rightShopIndex = rightIndex;
-    previous[0]=leftIndex;
-    previous[1]=middleIndex;
-    previous[2]=rightIndex
+    previous[0] = leftIndex;
+    previous[1] = middleIndex;
+    previous[2] = rightIndex
 
     shop.all[leftShopIndex].shown++;
     shop.all[middleShopIndex].shown++;
@@ -135,6 +145,7 @@ function Click(event) {
 function Show(event) {
     ulElement.style.display = 'block';
     for (let i = 0; i < shop.all.length; i++) {
+        localStorage.setItem('Shop', JSON.stringify(shop.all));
         const liElement = document.createElement('li');
         ulElement.appendChild(liElement);
         liElement.textContent = `${shop.all[i].name} had ${shop.all[i].clickCounter} votes, and was seen ${shop.all[i].shown} times.`;
@@ -145,8 +156,19 @@ function Show(event) {
 buttonElement.addEventListener('click', Show);
 buttonElement.addEventListener('click', renderChart);
 imageSection.addEventListener('click', Click);
-
+getData();
 Rshop();
+
+function getData() {
+    const data = localStorage.getItem('Shop');
+
+    if (data) {
+        const objData = JSON.parse(data);
+        shop.all = objData;
+        Rshop();
+
+    }
+}
 
 function renderChart() {
 
